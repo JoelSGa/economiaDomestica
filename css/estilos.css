@@ -1,0 +1,103 @@
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f2f2f2;
+  margin: 20px;
+  color: #333333;
+}
+
+
+#cabecera {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+#cabecera h1 {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+#cabecera p {
+  font-size: 14px;
+  color: #555555;
+}
+
+
+#zona-conceptos {
+  width: 90%;
+  max-width: 900px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+
+.tarjeta {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  width: 150px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.tarjeta:hover {
+  background-color: #eef3f8;
+  border-color: #999999;
+}
+
+.tarjeta img {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin: 0 auto 8px auto;
+}
+
+.tarjeta .nombre-concepto {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.tarjeta .precio-concepto {
+  font-size: 14px;
+  color: #006600;
+}
+
+/* 3. Bloque del botón */
+#bloque-boton {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+#boton-finalizar {
+  background-color: #336699;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#boton-finalizar:hover {
+  background-color: #254d73;
+}
+
+
+#caja-resumen {
+  width: 90%;
+  max-width: 480px;
+  min-height: 120px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border: 2px dashed #999999;
+  border-radius: 5px;
+  padding: 15px;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
