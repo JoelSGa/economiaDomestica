@@ -17,7 +17,7 @@ let listaConceptos = [];
 
 function cargarYLimpiarDatos() {
   try {
-    listaConceptos = conceptosJSON.map(function(item) {
+    listaConceptos = conceptosJS.map(function(item) {
       
       let precioCrudo = item.precio !== undefined ? item.precio : item.coste;
       
@@ -62,7 +62,7 @@ const listaTarjetas = document.querySelectorAll(".tarjeta");
 function registrarPago(idTarjeta) {
   try {
 
-    if (estadoResumenVist) {
+    if (estadoResumenVisto) {
       cajaResumen.innerHTML = "";
       estadoResumenVisto = false;
     }
@@ -133,16 +133,19 @@ function calcularMedia(totalGastado, cantidadPagos) {
 }
 
 
+
+
+
 function mostrarResumen() {
   try {
-  
     if (pagos.length === 0) {
       cajaResumen.innerHTML = "No se ha registrado ningún pago";
       return;
     }
 
-    let datosContado = contarPagos();
-    let datosOrdenado = ordenarLista(datosContados);
+   
+    let datosContados = contarPagos();
+    let datosOrdenados = ordenarLista(datosContados);
 
 
     let textoSalida = "";
@@ -151,8 +154,18 @@ function mostrarResumen() {
       textoSalida += fila.conceptoNombre + " ---- " + etiquetaPago + "<br>";
     });
 
+    let gastoMedio = calcularMedia(dineroTotal, pagos.length);
 
+  
+    cajaResumen.innerHTML = 
+      textoSalida +
+      "-----------------------------<br>" +
+      "Gasto final: " + dineroTotal.toFixed(2) + " €<br>" +
+      "Gasto medio: " + gastoMedio + " €/concepto";
 
+    estadoResumenVisto = true;
+
+  
     reiniciarValores();
 
   } catch (error) {
@@ -176,5 +189,25 @@ listaTarjetas.forEach(function(tarjeta) {
   });
 });
 
+
+botonFinalizar.addEventListener("click", mostrarResumen);
+
+
+
+
+/* Ayuda de la IA, Borrar no afecta el funcionamiento */
+console.log("Número de tarjetas encontradas:", listaTarjetas.length);
+
+listaTarjetas.forEach(function(tarjeta) {
+  tarjeta.addEventListener("click", function(evento) {
+    console.log("¡Clic detectado en una tarjeta!");
+    let contenedorTarjeta = evento.target.closest(".tarjeta");
+    if (contenedorTarjeta) {
+      let idSeleccionado = contenedorTarjeta.getAttribute("data-id");
+      console.log("ID pulsado:", idSeleccionado);
+      registrarPago(idSeleccionado);
+    }
+  });
+});
 
 botonFinalizar.addEventListener("click", mostrarResumen);
