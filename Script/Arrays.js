@@ -1,0 +1,180 @@
+
+const conceptosJS = [
+  { id: 0, nombre: "Luz", precio: "60" },
+  { id: 1, nombre: "Agua", precio: 25 },
+  { id: 2, nombre: "Gas", coste: "45" }, 
+  { id: 3, nombre: "internet", precio: 35 },
+  { id: 4, nombre: "Comunidad", precio: "50" },
+  { id: 5, nombre: "Alquiler", precio: 550 },
+  { id: 6, nombre: "Supermercado ", precio: "80 €" },
+  { id: 7, nombre: "Transporte", precio: 30 },
+  { id: 8, nombre: "Seguros", precio: "40" },
+  { id: 9, nombre: "Mantenimiento", precio: 20 }
+];
+
+let listaConceptos = [];
+
+
+function cargarYLimpiarDatos() {
+  try {
+    listaConceptos = conceptosJSON.map(function(item) {
+      
+      let precioCrudo = item.precio !== undefined ? item.precio : item.coste;
+      
+     
+      let precioLimpio = parseFloat(String(precioCrudo).replace("€", "").trim());
+
+      if (isNaN(precioLimpio)) {
+        precioLimpio = 0; 
+      }
+
+   
+      let nombreLimpio = item.nombre.trim();
+      nombreLimpio = nombreLimpio.charAt(0).toUpperCase() + nombreLimpio.slice(1);
+
+      return {
+        id: item.id,
+        nombre: nombreLimpio,
+        precio: precioLimpio
+      };
+    });
+  } catch (error) {
+    console.error("Error al limpiar los datos JSON:", error);
+  }
+}
+
+
+cargarYLimpiarDatos();
+
+
+let pagos = [];
+let dineroTotal = 0; 
+let estadoResumenVisto = false;
+
+
+const cajaResumen = document.getElementById("caja-resumen");
+const botonFinalizar = document.getElementById("boton-finalizar");
+const listaTarjetas = document.querySelectorAll(".tarjeta");
+
+
+
+
+function registrarPago(idTarjeta) {
+  try {
+
+    if (estadoResumenVist) {
+      cajaResumen.innerHTML = "";
+      estadoResumenVisto = false;
+    }
+
+  
+    let idNumero = parseInt(idTarjeta, 10);
+    if (isNaN(idNumero)) {
+      throw new Error("El ID seleccionado no es un número válido.");
+    }
+
+
+    let conceptoEncontrado = listaConceptos.find(function(elem) {
+      return elem.id === idNumero;
+    });
+
+    if (!conceptoEncontrado) {
+      throw new Error("No existe ningún concepto con ese identificador.");
+    }
+
+
+    pagos.push(conceptoEncontrado.nombre);
+    dineroTotal += conceptoEncontrado.precio;
+
+  } catch (err) {
+    console.error("Fallo al registrar pago:", err.message);
+  }
+}
+
+
+function contarPagos() {
+  let resultadoConteo = [];
+
+  listaConceptos.forEach(function(concepto) {
+  
+    let totalVeces = pagos.filter(function(nombrePago) {
+      return nombrePago === concepto.nombre;
+    }).length;
+
+    if (totalVeces > 0) {
+      resultadoConteo.push({
+        conceptoNombre: concepto.nombre,
+        numPagos: totalVeces
+      });
+    }
+  });
+
+  return resultadoConteo;
+}
+
+
+function ordenarLista(lista) {
+  return lista.sort(function(a, b) {
+    if (b.numPagos !== a.numPagos) {
+      return b.numPagos - a.numPagos;
+    }
+    return a.conceptoNombre.localeCompare(b.conceptoNombre); 
+  });
+}
+
+
+function calcularMedia(totalGastado, cantidadPagos) {
+
+  if (!cantidadPagos || cantidadPagos === 0) {
+    return "0.00";
+  }
+  let media = totalGastado / cantidadPagos;
+  return media.toFixed(2);
+}
+
+
+function mostrarResumen() {
+  try {
+  
+    if (pagos.length === 0) {
+      cajaResumen.innerHTML = "No se ha registrado ningún pago";
+      return;
+    }
+
+    let datosContado = contarPagos();
+    let datosOrdenado = ordenarLista(datosContados);
+
+
+    let textoSalida = "";
+    datosOrdenados.forEach(function(fila) {
+      let etiquetaPago = fila.numPagos === 1 ? "1 pago" : fila.numPagos + " pagos";
+      textoSalida += fila.conceptoNombre + " ---- " + etiquetaPago + "<br>";
+    });
+
+
+
+    reiniciarValores();
+
+  } catch (error) {
+    console.error("Error al procesar el resumen:", error);
+    cajaResumen.innerHTML = "Ocurrió un error al calcular los datos.";
+  }
+}
+
+
+
+function reiniciarValores() {
+  pagos = [];
+  dineroTotal = 0;
+}
+
+
+listaTarjetas.forEach(function(tarjeta) {
+  tarjeta.addEventListener("click", function() {
+    let idSeleccionado = tarjeta.getAttribute("data-id");
+    registrarPago(idSeleccionado);
+  });
+});
+
+
+botonFinalizar.addEventListener("click", mostrarResumen);
