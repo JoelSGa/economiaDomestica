@@ -1,4 +1,3 @@
-
 const conceptosJS = [
   { id: 0, nombre: "Luz", precio: "60" },
   { id: 1, nombre: "Agua", precio: 25 },
@@ -14,21 +13,16 @@ const conceptosJS = [
 
 let listaConceptos = [];
 
-
 function cargarYLimpiarDatos() {
   try {
     listaConceptos = conceptosJS.map(function(item) {
-      
       let precioCrudo = item.precio !== undefined ? item.precio : item.coste;
-      
-     
       let precioLimpio = parseFloat(String(precioCrudo).replace("€", "").trim());
 
       if (isNaN(precioLimpio)) {
         precioLimpio = 0; 
       }
 
-   
       let nombreLimpio = item.nombre.trim();
       nombreLimpio = nombreLimpio.charAt(0).toUpperCase() + nombreLimpio.slice(1);
 
@@ -43,36 +37,27 @@ function cargarYLimpiarDatos() {
   }
 }
 
-
 cargarYLimpiarDatos();
-
 
 let pagos = [];
 let dineroTotal = 0; 
 let estadoResumenVisto = false;
 
-
 const cajaResumen = document.getElementById("caja-resumen");
 const botonFinalizar = document.getElementById("boton-finalizar");
 const listaTarjetas = document.querySelectorAll(".tarjeta");
 
-
-
-
 function registrarPago(idTarjeta) {
   try {
-
     if (estadoResumenVisto) {
       cajaResumen.innerHTML = "";
       estadoResumenVisto = false;
     }
 
-  
     let idNumero = parseInt(idTarjeta, 10);
     if (isNaN(idNumero)) {
       throw new Error("El ID seleccionado no es un número válido.");
     }
-
 
     let conceptoEncontrado = listaConceptos.find(function(elem) {
       return elem.id === idNumero;
@@ -82,7 +67,6 @@ function registrarPago(idTarjeta) {
       throw new Error("No existe ningún concepto con ese identificador.");
     }
 
-
     pagos.push(conceptoEncontrado.nombre);
     dineroTotal += conceptoEncontrado.precio;
 
@@ -91,12 +75,10 @@ function registrarPago(idTarjeta) {
   }
 }
 
-
 function contarPagos() {
   let resultadoConteo = [];
 
   listaConceptos.forEach(function(concepto) {
-  
     let totalVeces = pagos.filter(function(nombrePago) {
       return nombrePago === concepto.nombre;
     }).length;
@@ -112,7 +94,6 @@ function contarPagos() {
   return resultadoConteo;
 }
 
-
 function ordenarLista(lista) {
   return lista.sort(function(a, b) {
     if (b.numPagos !== a.numPagos) {
@@ -122,19 +103,13 @@ function ordenarLista(lista) {
   });
 }
 
-
 function calcularMedia(totalGastado, cantidadPagos) {
-
   if (!cantidadPagos || cantidadPagos === 0) {
     return "0.00";
   }
   let media = totalGastado / cantidadPagos;
   return media.toFixed(2);
 }
-
-
-
-
 
 function mostrarResumen() {
   try {
@@ -143,10 +118,8 @@ function mostrarResumen() {
       return;
     }
 
-   
     let datosContados = contarPagos();
     let datosOrdenados = ordenarLista(datosContados);
-
 
     let textoSalida = "";
     datosOrdenados.forEach(function(fila) {
@@ -156,16 +129,13 @@ function mostrarResumen() {
 
     let gastoMedio = calcularMedia(dineroTotal, pagos.length);
 
-  
     cajaResumen.innerHTML = 
       textoSalida +
       "-----------------------------<br>" +
       "Gasto final: " + dineroTotal.toFixed(2) + " €<br>" +
-      "Gasto medio: " + gastoMedio + " €/concepto";
+      "Gasto medio: " + gastoMedio + " €/pago";
 
     estadoResumenVisto = true;
-
-  
     reiniciarValores();
 
   } catch (error) {
@@ -174,39 +144,15 @@ function mostrarResumen() {
   }
 }
 
-
-
 function reiniciarValores() {
   pagos = [];
   dineroTotal = 0;
 }
 
-
 listaTarjetas.forEach(function(tarjeta) {
   tarjeta.addEventListener("click", function() {
     let idSeleccionado = tarjeta.getAttribute("data-id");
     registrarPago(idSeleccionado);
-  });
-});
-
-
-botonFinalizar.addEventListener("click", mostrarResumen);
-
-
-
-
-/* Ayuda de la IA, Borrar no afecta el funcionamiento */
-console.log("Número de tarjetas encontradas:", listaTarjetas.length);
-
-listaTarjetas.forEach(function(tarjeta) {
-  tarjeta.addEventListener("click", function(evento) {
-    console.log("¡Clic detectado en una tarjeta!");
-    let contenedorTarjeta = evento.target.closest(".tarjeta");
-    if (contenedorTarjeta) {
-      let idSeleccionado = contenedorTarjeta.getAttribute("data-id");
-      console.log("ID pulsado:", idSeleccionado);
-      registrarPago(idSeleccionado);
-    }
   });
 });
 

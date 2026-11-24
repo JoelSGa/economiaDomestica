@@ -1,0 +1,43 @@
+{
+    "conceptos": [
+        {
+            "id": "1",
+            "nombre": "Luz",
+            "img": "../img/imagen1.jpg",
+            "imprescindible": true,
+            "categoria": "S_BAS"
+        },
+        {
+            "id": "2",
+            "nombre": "Agua",
+            "img": "../img/imagen2.jpg",
+            "imprescindible": true,
+            "categoria": "S_BAS"
+        },
+        {
+            "id": "3",
+            "nombre": "Pinchos",
+            "img": "../img/imagen3.jpg",
+            "imprescindible": false,
+            "categoria": "OC"
+        }
+    ],
+    "registros": [
+        {
+            "id": "1",
+            "fecha": "05/2023",
+            "pagos": [
+                {
+                    "idConcepto": "7",
+                    "importeTotal": 45.78,
+                    "numPagos": 5
+                },
+                {
+                    "idConcepto": "2",
+                    "importeTotal": 37.23,
+                    "numPagos": 3
+                }
+            ]
+        }
+    ]
+}
