@@ -53,8 +53,17 @@ body {
   width: 60px;
   height: 60px;
   display: block;
-  pointer-events: none;
+  cursor: pointer;
   margin: 0 auto 8px auto;
+}
+
+.tarjeta .input-importe {
+  width: 85%;
+  padding: 5px;
+  margin-top: 5px;
+  text-align: center;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
 }
 
 .tarjeta .nombre-concepto {
@@ -103,3 +112,12 @@ body {
   line-height: 1.6;
 }
 
+.tarjeta .input-importe::-webkit-outer-spin-button,
+.tarjeta .input-importe::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.tarjeta .in
+put-importe {
+  -moz-appearance: textfield;
+}

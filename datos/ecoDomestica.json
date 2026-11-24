@@ -1,26 +1,72 @@
 {
-    "conceptos": [
-        {
-            "id": "1",
-            "nombre": "Luz",
-            "img": "../img/imagen1.jpg",
-            "imprescindible": true,
-            "categoria": "S_BAS"
-        },
-        {
-            "id": "2",
-            "nombre": "Agua",
-            "img": "../img/imagen2.jpg",
-            "imprescindible": true,
-            "categoria": "S_BAS"
-        },
-        {
-            "id": "3",
-            "nombre": "Pinchos",
-            "img": "../img/imagen3.jpg",
-            "imprescindible": false,
-            "categoria": "OC"
-        }
+  "conceptos": [
+    { 
+    "id": "1",
+    "nombre": "Luz",
+    "img": "img/luz-energetica.jpg",
+    "imprescindible": true, "categoria": "S_BAS"
+ },
+    { 
+    "id": "2",
+    "nombre": "Agua",
+    "img": "img/Agua.jpg",
+    "imprescindible": true,
+    "categoria": "S_BAS" 
+},
+    { 
+    "id": "3",
+    "nombre": "Gas",
+    "img": "img/Gas.jpg",
+    "imprescindible": true,
+    "categoria": "S_BAS"
+},
+    { 
+    "id": "4",
+    "nombre": "Internet",
+    "img": "img/Internet.jpg",
+    "imprescindible": true,
+    "categoria": "S_BAS"
+},
+    { "id": "5",
+    "nombre": "Comunidad",
+    "img": "img/Comunidad.jpg",
+    "imprescindible": true,
+    "categoria":"S_BAS"
+},
+    { "id": "6",
+    "nombre": "Alquiler",
+    "img": "img/Alquiler.jpg",
+    "imprescindible": true,
+    "categoria": "S_BAS"
+},
+    {
+    "id": "7",
+    "nombre": "Supermercado",
+    "img": "img/SuperMercado.jpg",
+    "imprescindible": true,
+    "categoria": "ALI" 
+},
+    { "id": "8",
+    "nombre": "Transporte",
+    "img": "img/Transporte.jpg",
+    "imprescindible": true,
+    "categoria": "S_BAS"
+},
+    { 
+    "id": "9",
+    "nombre": "Seguros",
+    "img": "img/Seguro.jpg",
+    "imprescindible": true,
+    "categoria": "S_BAS" 
+},
+    { 
+        "id": "10",
+        "nombre": "Mantenimiento",
+        "img": "img/Mantenimiento.jpg",
+        "imprescindible": false,
+        "categoria": "S_BAS"
+    }
+  
     ],
     "registros": [
         {
