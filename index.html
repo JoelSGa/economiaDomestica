@@ -7,19 +7,27 @@
 </head>
 <body>
 
-  <div id="cabecera">
-    <h1>Gestión de Gastos de la Casa</h1>
-    <p id="fecha-tramite">Trámite activo: pendiente de iniciar</p>
-    <p>Introduce el importe y haz clic sobre la imagen de cada gasto para registrar un pago.</p>
+  <div id="contenedor-principal">
+    <div id="cabecera">
+      <h1>Gestión de Gastos de la Casa</h1>
+      <p id="fecha-tramite">Trámite activo: pendiente de iniciar</p>
+      <p>Introduce el importe y haz clic sobre la imagen de cada gasto para registrar un pago.</p>
+    </div>
+
+    <div id="zona-conceptos"></div>
+
+    <div id="bloque-boton">
+      <button id="boton-finalizar" type="button">Finalizar trámite y ver resumen</button>
+    </div>
+
+    <div id="caja-resumen"></div>
   </div>
 
-  <div id="zona-conceptos"></div>
-
-  <div id="bloque-boton">
-    <button id="boton-finalizar" type="button">Finalizar trámite y ver resumen</button>
-  </div>
-
-  <div id="caja-resumen"></div>
+  <aside id="panel-lateral">
+    <h2>Pagos realizados</h2>
+    <p id="texto-sin-pagos">Aún no hay pagos registrados en este trámite.</p>
+    <ul id="lista-pagos-lateral"></ul>
+  </aside>
 
   <script src="Script/Modelos.js"></script>
   <script src="Script/ServicioDatos.js"></script>
