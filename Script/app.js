@@ -22,6 +22,16 @@ function obtenerFechaActualFormateada() {
   return `${mes}/${anio}`;
 }
 
+function obtenerFechaHoraFinalizacion() {
+  const fin = new Date();
+  const dia = String(fin.getDate()).padStart(2, "0");
+  const mes = String(fin.getMonth() + 1).padStart(2, "0");
+  const anio = fin.getFullYear();
+  const hora = String(fin.getHours()).padStart(2, "0");
+  const minutos = String(fin.getMinutes()).padStart(2, "0");
+  return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
+}
+
 function solicitarFechaTramite() {
   const patronFecha = /^(0[1-9]|1[0-2])\/\d{4}$/;
   let fecha = "";
@@ -136,6 +146,11 @@ function pintarResumenFinal() {
   titulo.textContent = `Resumen del trámite (${tramiteActual.fecha})`;
   cajaResumen.appendChild(titulo);
 
+  const pFecha = document.createElement("p");
+  pFecha.id = "fecha-finalizacion";
+  pFecha.textContent = `Fecha: ${obtenerFechaHoraFinalizacion()}`;
+  cajaResumen.appendChild(pFecha);
+
   const lista = document.createElement("ul");
 
   pagosOrdenados.forEach(pago => {
@@ -154,7 +169,7 @@ function pintarResumenFinal() {
   cajaResumen.appendChild(pTotal);
 
   const pMedia = document.createElement("p");
-  pMedia.innerHTML = `<strong>Gasto medio por concepto:</strong> ${mediaPorConcepto.toFixed(2)} €`;
+  pMedia.innerHTML = `<strong>Gasto medio por concepto:</strong> ${mediaPorConcepto.toFixed(3)} €`;
   cajaResumen.appendChild(pMedia);
 
   const pAvisoGuardado = document.createElement("p");
@@ -178,13 +193,24 @@ function finalizarTramite() {
 
   pintarResumenFinal();
 
+  const tramiteAConcluir = tramiteActual;
+
+  setTimeout(() => {
+    limpiarZonaLateral();
+    limpiarResumenFinal();
+    limpiarVariablesInternas();
+    dialogoFin.close();
+    window.close();
+  }, 10000);
+
   setTimeout(async () => {
     try {
-      await servicioDatos.guardarRegistro(tramiteActual);
+      await servicioDatos.guardarRegistro(tramiteAConcluir);
       const estadoGuardado = document.getElementById("estado-guardado");
       if (estadoGuardado) {
         estadoGuardado.textContent = "Registro guardado correctamente en ecoDomestica.json.";
       }
+      poblarDialogoDetalle(tramiteAConcluir);
       dialogoFin.showModal();
     } catch (error) {
       console.error("Error al guardar el registro en json-server:", error);
@@ -193,6 +219,45 @@ function finalizarTramite() {
       botonFinalizar.disabled = false;
     }
   }, 10000);
+}
+
+function poblarDialogoDetalle(tramite) {
+  const areaDetalle = document.getElementById("dialogo-fin-detalle");
+  if (!areaDetalle || !tramite) return;
+
+  areaDetalle.textContent = "";
+
+  const conceptos = tramite.pagos
+    .map(pago => listaConceptos.find(concepto => concepto.id === pago.idConcepto))
+    .filter(concepto => concepto !== undefined);
+
+  if (conceptos.length === 0) return;
+
+  const titulo = document.createElement("strong");
+  titulo.textContent = "Detalle de los conceptos pagados:";
+  areaDetalle.appendChild(titulo);
+
+  conceptos.forEach(concepto => {
+    const linea = document.createElement("p");
+    linea.textContent = concepto.obtenerDescripcion();
+    areaDetalle.appendChild(linea);
+  });
+}
+
+function limpiarZonaLateral() {
+  listaPagosLateral.innerHTML = "";
+  textoSinPagos.style.display = "block";
+}
+
+function limpiarResumenFinal() {
+  cajaResumen.innerHTML = "";
+  cajaResumen.style.display = "none";
+}
+
+function limpiarVariablesInternas() {
+  tramiteActual = null;
+  tramiteBloqueado = false;
+  idConceptoSeleccionado = null;
 }
 
 function renderizarConceptos(conceptos) {

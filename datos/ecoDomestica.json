@@ -129,6 +129,22 @@
         }
       ],
       "id": "neIfaWoQvXA"
+    },
+    {
+      "fecha": "11/2026",
+      "pagos": [
+        {
+          "idConcepto": "10",
+          "importeTotal": 100,
+          "numPagos": 1
+        },
+        {
+          "idConcepto": "7",
+          "importeTotal": 200,
+          "numPagos": 2
+        }
+      ],
+      "id": "BPciayPXpwo"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
