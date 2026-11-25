@@ -1,89 +1,135 @@
 {
   "conceptos": [
-    { 
-    "id": "1",
-    "nombre": "Luz",
-    "img": "img/luz-energetica.jpg",
-    "imprescindible": true, "categoria": "S_BAS"
- },
-    { 
-    "id": "2",
-    "nombre": "Agua",
-    "img": "img/Agua.jpg",
-    "imprescindible": true,
-    "categoria": "S_BAS" 
-},
-    { 
-    "id": "3",
-    "nombre": "Gas",
-    "img": "img/Gas.jpg",
-    "imprescindible": true,
-    "categoria": "S_BAS"
-},
-    { 
-    "id": "4",
-    "nombre": "Internet",
-    "img": "img/Internet.jpg",
-    "imprescindible": true,
-    "categoria": "S_BAS"
-},
-    { "id": "5",
-    "nombre": "Comunidad",
-    "img": "img/Comunidad.jpg",
-    "imprescindible": true,
-    "categoria":"S_BAS"
-},
-    { "id": "6",
-    "nombre": "Alquiler",
-    "img": "img/Alquiler.jpg",
-    "imprescindible": true,
-    "categoria": "S_BAS"
-},
     {
-    "id": "7",
-    "nombre": "Supermercado",
-    "img": "img/SuperMercado.jpg",
-    "imprescindible": true,
-    "categoria": "ALI" 
-},
-    { "id": "8",
-    "nombre": "Transporte",
-    "img": "img/Transporte.jpg",
-    "imprescindible": true,
-    "categoria": "S_BAS"
-},
-    { 
-    "id": "9",
-    "nombre": "Seguros",
-    "img": "img/Seguro.jpg",
-    "imprescindible": true,
-    "categoria": "S_BAS" 
-},
-    { 
-        "id": "10",
-        "nombre": "Mantenimiento",
-        "img": "img/Mantenimiento.jpg",
-        "imprescindible": false,
-        "categoria": "S_BAS"
+      "id": "1",
+      "nombre": "Luz",
+      "img": "img/luz-energetica.jpg",
+      "imprescindible": true,
+      "categoria": "S_BAS"
+    },
+    {
+      "id": "2",
+      "nombre": "Agua",
+      "img": "img/Agua.jpg",
+      "imprescindible": true,
+      "categoria": "S_BAS"
+    },
+    {
+      "id": "3",
+      "nombre": "Gas",
+      "img": "img/Gas.jpg",
+      "imprescindible": true,
+      "categoria": "S_BAS"
+    },
+    {
+      "id": "4",
+      "nombre": "Internet",
+      "img": "img/Internet.jpg",
+      "imprescindible": true,
+      "categoria": "S_BAS"
+    },
+    {
+      "id": "5",
+      "nombre": "Comunidad",
+      "img": "img/Comunidad.jpg",
+      "imprescindible": true,
+      "categoria": "S_BAS"
+    },
+    {
+      "id": "6",
+      "nombre": "Alquiler",
+      "img": "img/Alquiler.jpg",
+      "imprescindible": true,
+      "categoria": "S_BAS"
+    },
+    {
+      "id": "7",
+      "nombre": "Supermercado",
+      "img": "img/SuperMercado.jpg",
+      "imprescindible": true,
+      "categoria": "ALI"
+    },
+    {
+      "id": "8",
+      "nombre": "Transporte",
+      "img": "img/Transporte.jpg",
+      "imprescindible": true,
+      "categoria": "S_BAS"
+    },
+    {
+      "id": "9",
+      "nombre": "Seguros",
+      "img": "img/Seguro.jpg",
+      "imprescindible": true,
+      "categoria": "S_BAS"
+    },
+    {
+      "id": "10",
+      "nombre": "Mantenimiento",
+      "img": "img/Mantenimiento.jpg",
+      "imprescindible": false,
+      "categoria": "S_BAS"
     }
-  
-    ],
-    "registros": [
+  ],
+  "registros": [
+    {
+      "id": "1",
+      "fecha": "05/2023",
+      "pagos": [
         {
-            "id": "1",
-            "fecha": "05/2023",
-            "pagos": [
-                {
-                    "idConcepto": "7",
-                    "importeTotal": 45.78,
-                    "numPagos": 5
-                },
-                {
-                    "idConcepto": "2",
-                    "importeTotal": 37.23,
-                    "numPagos": 3
-                }
-            ]
+          "idConcepto": "7",
+          "importeTotal": 45.78,
+          "numPagos": 5
+        },
+        {
+          "idConcepto": "2",
+          "importeTotal": 37.23,
+          "numPagos": 3
         }
-    ]
+      ]
+    },
+    {
+      "fecha": "11/2020",
+      "pagos": [
+        {
+          "idConcepto": "3",
+          "importeTotal": 10,
+          "numPagos": 1
+        },
+        {
+          "idConcepto": "4",
+          "importeTotal": 20,
+          "numPagos": 2
+        },
+        {
+          "idConcepto": "7",
+          "importeTotal": 10,
+          "numPagos": 1
+        }
+      ],
+      "id": "Br9zvBivTL0"
+    },
+    {
+      "fecha": "11/2026",
+      "pagos": [
+        {
+          "idConcepto": "4",
+          "importeTotal": 20,
+          "numPagos": 2
+        },
+        {
+          "idConcepto": "8",
+          "importeTotal": 10,
+          "numPagos": 1
+        },
+        {
+          "idConcepto": "10",
+          "importeTotal": 10,
+          "numPagos": 1
+        }
+      ],
+      "id": "neIfaWoQvXA"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

@@ -3,11 +3,17 @@ const servicioDatos = new ServicioDatos("http://localhost:3000");
 let listaConceptos = [];
 let tramiteActual = null;
 let idConceptoSeleccionado = null;
+let tramiteBloqueado = false;
 
 const zonaConceptos = document.getElementById("zona-conceptos");
 const textoFechaTramite = document.getElementById("fecha-tramite");
 const listaPagosLateral = document.getElementById("lista-pagos-lateral");
 const textoSinPagos = document.getElementById("texto-sin-pagos");
+const botonFinalizar = document.getElementById("boton-finalizar");
+const cajaResumen = document.getElementById("caja-resumen");
+const dialogoFin = document.getElementById("dialogo-fin");
+const btnNuevoTramite = document.getElementById("btn-nuevo-tramite");
+const btnCerrarApp = document.getElementById("btn-cerrar-app");
 
 function obtenerFechaActualFormateada() {
   const hoy = new Date();
@@ -30,29 +36,35 @@ function solicitarFechaTramite() {
   }
 
   tramiteActual = new Tramite(fecha);
+  tramiteBloqueado = false;
+  idConceptoSeleccionado = null;
+  botonFinalizar.disabled = false;
+  cajaResumen.style.display = "none";
+  cajaResumen.innerHTML = "";
   textoFechaTramite.textContent = `Trámite activo: ${tramiteActual.fecha}`;
+
+  resaltarConcepto(null, false);
+  pintarPanelLateral();
 }
 
 function resaltarConcepto(idConcepto, activo) {
   const tarjetas = document.querySelectorAll(".tarjeta");
   tarjetas.forEach(tarjeta => {
-    if (tarjeta.getAttribute("data-id") === idConcepto) {
-      if (activo) {
-        tarjeta.classList.add("resaltada");
-      } else {
-        tarjeta.classList.remove("resaltada");
-      }
+    const esMismo = tarjeta.getAttribute("data-id") === idConcepto;
+    if (idConcepto && esMismo && activo) {
+      tarjeta.classList.add("resaltada");
+    } else if (!idConcepto || esMismo) {
+      tarjeta.classList.remove("resaltada");
     }
   });
 
   const filasLateral = document.querySelectorAll("#lista-pagos-lateral li");
   filasLateral.forEach(fila => {
-    if (fila.getAttribute("data-id") === idConcepto) {
-      if (activo) {
-        fila.classList.add("resaltado");
-      } else {
-        fila.classList.remove("resaltado");
-      }
+    const esMismo = fila.getAttribute("data-id") === idConcepto;
+    if (idConcepto && esMismo && activo) {
+      fila.classList.add("resaltado");
+    } else if (!idConcepto || esMismo) {
+      fila.classList.remove("resaltado");
     }
   });
 }
@@ -88,6 +100,8 @@ function pintarPanelLateral() {
 }
 
 function gestionarClicImagen(concepto, tarjeta) {
+  if (tramiteBloqueado) return;
+
   const inputImporte = tarjeta.querySelector(".input-importe");
   const valorTexto = inputImporte.value.trim().replace(",", ".");
   const importe = parseFloat(valorTexto);
@@ -109,6 +123,76 @@ function gestionarClicImagen(concepto, tarjeta) {
 
   pintarPanelLateral();
   resaltarConcepto(concepto.id, true);
+}
+
+function pintarResumenFinal() {
+  const pagosOrdenados = tramiteActual.obtenerPagosOrdenados();
+  const totalRedondeado = tramiteActual.obtenerTotalRedondeadoAbajo();
+  const mediaPorConcepto = tramiteActual.obtenerMediaPorConcepto();
+
+  cajaResumen.innerHTML = "";
+
+  const titulo = document.createElement("h2");
+  titulo.textContent = `Resumen del trámite (${tramiteActual.fecha})`;
+  cajaResumen.appendChild(titulo);
+
+  const lista = document.createElement("ul");
+
+  pagosOrdenados.forEach(pago => {
+    const concepto = listaConceptos.find(c => c.id === pago.idConcepto);
+    const nombreConcepto = concepto ? concepto.nombre : `Concepto ${pago.idConcepto}`;
+
+    const li = document.createElement("li");
+    li.textContent = `${nombreConcepto} — Pagos: ${pago.numPagos} | Total: ${pago.importeTotal.toFixed(2)} € | Aporte medio: ${pago.aporteMedio.toFixed(2)} €`;
+    lista.appendChild(li);
+  });
+
+  cajaResumen.appendChild(lista);
+
+  const pTotal = document.createElement("p");
+  pTotal.innerHTML = `<strong>Gasto total (redondeado abajo):</strong> ${totalRedondeado} €`;
+  cajaResumen.appendChild(pTotal);
+
+  const pMedia = document.createElement("p");
+  pMedia.innerHTML = `<strong>Gasto medio por concepto:</strong> ${mediaPorConcepto.toFixed(2)} €`;
+  cajaResumen.appendChild(pMedia);
+
+  const pAvisoGuardado = document.createElement("p");
+  pAvisoGuardado.id = "estado-guardado";
+  pAvisoGuardado.textContent = "Guardando registro en el servidor en 10 segundos...";
+  cajaResumen.appendChild(pAvisoGuardado);
+
+  cajaResumen.style.display = "block";
+}
+
+function finalizarTramite() {
+  if (tramiteBloqueado) return;
+
+  if (!tramiteActual || tramiteActual.pagos.length === 0) {
+    alert("Debes registrar al menos un pago antes de finalizar el trámite.");
+    return;
+  }
+
+  tramiteBloqueado = true;
+  botonFinalizar.disabled = true;
+
+  pintarResumenFinal();
+
+  setTimeout(async () => {
+    try {
+      await servicioDatos.guardarRegistro(tramiteActual);
+      const estadoGuardado = document.getElementById("estado-guardado");
+      if (estadoGuardado) {
+        estadoGuardado.textContent = "Registro guardado correctamente en ecoDomestica.json.";
+      }
+      dialogoFin.showModal();
+    } catch (error) {
+      console.error("Error al guardar el registro en json-server:", error);
+      alert("No se pudo guardar el registro en json-server. Comprueba que esté activo.");
+      tramiteBloqueado = false;
+      botonFinalizar.disabled = false;
+    }
+  }, 10000);
 }
 
 function renderizarConceptos(conceptos) {
@@ -137,11 +221,11 @@ function renderizarConceptos(conceptos) {
     img.addEventListener("click", () => gestionarClicImagen(concepto, tarjeta));
 
     tarjeta.addEventListener("mouseenter", () => {
-      resaltarConcepto(concepto.id, true);
+      if (!tramiteBloqueado) resaltarConcepto(concepto.id, true);
     });
 
     tarjeta.addEventListener("mouseleave", () => {
-      if (idConceptoSeleccionado !== concepto.id) {
+      if (!tramiteBloqueado && idConceptoSeleccionado !== concepto.id) {
         resaltarConcepto(concepto.id, false);
       }
     });
@@ -152,6 +236,19 @@ function renderizarConceptos(conceptos) {
     zonaConceptos.appendChild(tarjeta);
   });
 }
+
+botonFinalizar.addEventListener("click", finalizarTramite);
+
+btnNuevoTramite.addEventListener("click", () => {
+  dialogoFin.close();
+  solicitarFechaTramite();
+});
+
+btnCerrarApp.addEventListener("click", () => {
+  dialogoFin.close();
+  textoFechaTramite.textContent = "Aplicación finalizada. Puedes cerrar esta pestaña.";
+  window.close();
+});
 
 async function iniciarAplicacion() {
   try {
